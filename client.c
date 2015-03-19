@@ -43,7 +43,6 @@ int main(int argc, char **argv)
 
 int tcp_connect(char *ip, char *port)
 {
-
 	int sockfd, connfd;
 	struct sockaddr_in  servaddr;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
