@@ -48,7 +48,10 @@ int main(int argc, char **argv)
 
 int tcp_connect(char *ip, char *port)
 {
+<<<<<<< HEAD
     //printf("not connected\n");
+=======
+>>>>>>> 9559469e6d4c7e9664a37ee6fa47292c73467deb
 	int sockfd, connfd;
 	struct sockaddr_in  servaddr;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
