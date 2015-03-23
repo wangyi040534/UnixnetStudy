@@ -4,6 +4,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #define MAXN 16384
+static int num = 0;
 int tcp_connect(char *ip, char *port);
 int main(int argc, char **argv)
 {
@@ -18,27 +19,30 @@ int main(int argc, char **argv)
 	nchildren = 10;
 	//nloops = atoi(argv[4]);
 	//nbytes = atoi(argv[5]);
-	nloops = 10;
+	nloops = 5;
 	nbytes = atoi(argv[3]);
-    snprintf(request, sizeof(request), "%d\n", nbytes);
+ //   snprintf(request, sizeof(request), "%d\n", nbytes);
 	//printf("initialize successfully!\n");
 	i = 0;
 	for(i; i < nchildren; i++){
 		if((pid = fork()) == 0){
             printf("%d child fork successfully!\n",i);
 			j = 0;
-			for(j;j < nloops; j++){
+			for(j ; j < nloops; j++){
 				printf("%d child %d loop is successful!\n", i, j);
 				fd = tcp_connect(argv[1], argv[2]);
-				write(fd, request, strlen(request));
-				if((n = read(fd, reply, nbytes)) != nbytes)
-					printf("server returned %d bytes", n);
+				write(fd, argv[3], strlen(argv[3]));
+				if((n = read(fd, reply, 1024)) > 0)
+	//				printf("server returned %d bytes", n);
+					fputs(reply, stdout);
+				printf("read successfully\n");
 				close(fd);
 			}
 			printf("child %d done\n",i);
 			exit(0);
 		}
 	}
+	printf("%d process handled\n", num);
 	while(wait(NULL) > 0)
 		;
 	//if(errno != ECHILD)
@@ -48,10 +52,7 @@ int main(int argc, char **argv)
 
 int tcp_connect(char *ip, char *port)
 {
-<<<<<<< HEAD
     //printf("not connected\n");
-=======
->>>>>>> 9559469e6d4c7e9664a37ee6fa47292c73467deb
 	int sockfd, connfd;
 	struct sockaddr_in  servaddr;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -62,6 +63,8 @@ int tcp_connect(char *ip, char *port)
 	if((connfd = connect(sockfd, (struct sockaddr*)&servaddr,
 				        sizeof(servaddr))) != 0)
 		printf("connect failed!\n");
-    //printf("%d is connected",connfd);
-	return connfd;
+	//else
+        //printf("%d is connected\n",getpid());
+    num++;
+	return sockfd;
 }
